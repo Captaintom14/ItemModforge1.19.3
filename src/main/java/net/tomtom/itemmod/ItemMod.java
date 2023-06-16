@@ -22,6 +22,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.tomtom.itemmod.itemPackage.modItem;
+import net.tomtom.itemmod.util.modItemProperties;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -36,7 +38,8 @@ public class ItemMod {
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // Register the commonSetup method for modloading
+        modItem.register(modEventBus);
+
         modEventBus.addListener(this::commonSetup);
 
         // Register ourselves for server and other game events we are interested in
@@ -51,8 +54,11 @@ public class ItemMod {
 
     }
 
-    private void addCreative(CreativeModeTabEvent.BuildContents event)
-    {
+    private void addCreative(CreativeModeTabEvent.BuildContents event) {
+
+        if (event.getTab() == CreativeModeTabs.COMBAT){
+            event.accept(modItem.KirbyWand);
+        }
 
     }
 
@@ -65,6 +71,9 @@ public class ItemMod {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+
+            modItemProperties.addCustomProperties();
+
 
         }
     }
